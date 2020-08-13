@@ -9,6 +9,7 @@ interface RequestDTO {
 }
 
 class CreateAppointmentService {
+  // eslint-disable-next-line class-methods-use-this
   public async execute({ date, provider }: RequestDTO): Promise<Appoitment> {
     const appoitmentsRepository = getCustomRepository(AppoitmentsRepository);
     const startDateHour = startOfHour(date);
@@ -25,7 +26,7 @@ class CreateAppointmentService {
       provider,
       date: startDateHour,
     });
-    
+
     await appoitmentsRepository.save(appointment);
 
     return appointment;

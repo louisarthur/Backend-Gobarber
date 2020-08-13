@@ -1,17 +1,16 @@
 import { Router } from 'express';
-import { startOfHour, parseISO, isEqual } from 'date-fns';
+import { parseISO } from 'date-fns';
 // parseISO transforma o timestamp e transforma em hora nativa do javascript
 // import Appointment from '../models/Appointment';
+import { getCustomRepository } from 'typeorm';
 import AppointmentsRepository from '../repositories/AppoitmentsRepository';
 // Responsabilidade da rota é receber a requisição, chamar outro arquivo e devolver uma resposta
 import CreateAppointmentService from '../services/CreateAppointmentService';
-import { getCustomRepository } from 'typeorm';
-import Appointment from '../models/Appointment';
 
 const appointmentsRouter = Router();
 
-appointmentsRouter.get('/',  async (request, response) => {
-  const appointmentsRepository = getCustomRepository(AppointmentsRepository)
+appointmentsRouter.get('/', async (request, response) => {
+  const appointmentsRepository = getCustomRepository(AppointmentsRepository);
   const allAppointments = await appointmentsRepository.find();
   return response.json(allAppointments);
 });
