@@ -10,9 +10,9 @@ import Appointment from '../models/Appointment';
 
 const appointmentsRouter = Router();
 
-appointmentsRouter.get('/', (request, response) => {
+appointmentsRouter.get('/',  async (request, response) => {
   const appointmentsRepository = getCustomRepository(AppointmentsRepository)
-  const allAppointments = appointmentsRepository.find();
+  const allAppointments = await appointmentsRepository.find();
   return response.json(allAppointments);
 });
 
