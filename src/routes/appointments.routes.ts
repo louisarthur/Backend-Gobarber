@@ -5,26 +5,26 @@ import { startOfHour, parseISO, isEqual } from 'date-fns';
 import AppointmentsRepository from '../repositories/AppoitmentsRepository';
 // Responsabilidade da rota é receber a requisição, chamar outro arquivo e devolver uma resposta
 import CreateAppointmentService from '../services/CreateAppointmentService';
+import { getCustomRepository } from 'typeorm';
+import Appointment from '../models/Appointment';
 
 const appointmentsRouter = Router();
-const appointmentRepository = new AppointmentsRepository();
 
 appointmentsRouter.get('/', (request, response) => {
-  const allAppointments = appointmentRepository.getAllAppointments();
+  const appointmentsRepository = getCustomRepository(AppointmentsRepository)
+  const allAppointments = appointmentsRepository.find();
   return response.json(allAppointments);
 });
 
-appointmentsRouter.post('/', (request, response) => {
+appointmentsRouter.post('/', async (request, response) => {
   try {
     const { provider, date } = request.body;
 
     const parsedDate = parseISO(date);
 
-    const createAppointment = new CreateAppointmentService(
-      appointmentRepository,
-    );
+    const createAppointment = new CreateAppointmentService();
 
-    const appointment = createAppointment.execute({
+    const appointment = await createAppointment.execute({
       date: parsedDate,
       provider,
     });
